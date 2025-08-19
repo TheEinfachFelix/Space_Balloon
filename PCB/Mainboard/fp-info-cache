@@ -1,4 +1,4 @@
-23170274165658967
+23175540782101816
 Audio_Module
 Reverb_BTDR-1H
 Digital Reverberation Unit, http://www.belton.co.kr/inc/downfile.php?seq=17&file=pdf (footprint from http://www.uk-electronic.de/PDF/BTDR-1.pdf)
@@ -55671,6 +55671,13 @@ BAT-TH_L77.0-W39.9_BH-18650-A1BJ021
 4
 4
 Felix
+BAT_BK-18650-PC8
+
+
+0
+8
+8
+Felix
 ESOP-8_L4.9-W3.9-P1.27-LS6.0-BL-EP
 
 
@@ -55721,6 +55728,13 @@ MIC-TH_BD4.0-P1.40_KEEG1542PBL-A
 2
 Felix
 MODULE_ESP32_DEVKIT_V1
+
+
+0
+30
+30
+Felix
+MODULE_ESP32_DEVKIT_V1_NO_WIFI
 
 
 0
@@ -55782,6 +55796,13 @@ SIM-SMD_503960-0696
 0
 14
 9
+Felix_GSM
+SIM800L-CORE
+
+
+0
+12
+12
 Felix_LED
 4691
 4691-1

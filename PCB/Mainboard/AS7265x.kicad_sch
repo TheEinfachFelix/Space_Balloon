@@ -2,7 +2,7 @@
 	(version 20231120)
 	(generator "eeschema")
 	(generator_version "8.0")
-	(uuid "acfda7aa-aa35-4c1e-810b-e41e39d10c45")
+	(uuid "4c8ce71a-795d-412d-8b87-6f64051dc89a")
 	(paper "A4")
 	(lib_symbols
 		(symbol "Connector:Conn_01x06_Pin"
@@ -767,19 +767,21 @@
 		(fields_autoplaced yes)
 		(uuid "f331c1c7-b20b-4b3d-8ffa-e53044a348b2")
 		(property "Reference" "J2"
-			(at 141.605 105.41 0)
+			(at 143.51 92.7099 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
+				(justify right)
 			)
 		)
-		(property "Value" "Conn_01x06_Pin"
-			(at 141.605 102.87 0)
+		(property "Value" "AS7265X"
+			(at 143.51 95.2499 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
+				(justify right)
 			)
 		)
 		(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x06_P2.54mm_Vertical"

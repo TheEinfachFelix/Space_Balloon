@@ -2,7 +2,7 @@
 	(version 20231120)
 	(generator "eeschema")
 	(generator_version "8.0")
-	(uuid "6d9babe6-18ca-442d-8efb-0326cfdd3bda")
+	(uuid "f6516630-0a7c-4beb-ae77-969e312aefd7")
 	(paper "A4")
 	(lib_symbols
 		(symbol "Connector:Conn_01x03_Pin"
@@ -523,7 +523,7 @@
 				(justify right)
 			)
 		)
-		(property "Value" "Conn_01x03_Pin"
+		(property "Value" "UV"
 			(at 139.7 110.4899 0)
 			(effects
 				(font

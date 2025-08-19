@@ -2,7 +2,7 @@
 	(version 20231120)
 	(generator "eeschema")
 	(generator_version "8.0")
-	(uuid "62280ef4-b721-41d0-87af-27fa48c58f1a")
+	(uuid "9c0ec2c5-5329-4125-adc1-5fe8a16ecb76")
 	(paper "A4")
 	(lib_symbols
 		(symbol "Connector:Conn_01x10_Pin"
@@ -896,7 +896,7 @@
 				)
 			)
 		)
-		(property "Value" "Conn_01x10_Pin"
+		(property "Value" "ADS1115"
 			(at 131.445 85.09 0)
 			(effects
 				(font

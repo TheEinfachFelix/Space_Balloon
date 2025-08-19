@@ -2,7 +2,7 @@
 	(version 20231120)
 	(generator "eeschema")
 	(generator_version "8.0")
-	(uuid "3773e6c5-9ca3-411c-8130-cbee0bc25acc")
+	(uuid "eed07da0-3874-4e41-84cc-ea1200a6bbbe")
 	(paper "A4")
 	(lib_symbols
 		(symbol "Connector:Conn_01x06_Pin"
@@ -632,7 +632,7 @@
 				)
 			)
 		)
-		(property "Value" "Conn_01x06_Pin"
+		(property "Value" "SD-Card"
 			(at 136.525 96.52 0)
 			(effects
 				(font
