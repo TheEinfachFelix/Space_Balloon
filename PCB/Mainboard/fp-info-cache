@@ -1,4 +1,4 @@
-23175540782101816
+23177296472175607
 Audio_Module
 Reverb_BTDR-1H
 Digital Reverberation Unit, http://www.belton.co.kr/inc/downfile.php?seq=17&file=pdf (footprint from http://www.uk-electronic.de/PDF/BTDR-1.pdf)
@@ -55735,6 +55735,13 @@ MODULE_ESP32_DEVKIT_V1
 30
 Felix
 MODULE_ESP32_DEVKIT_V1_NO_WIFI
+
+
+0
+30
+30
+Felix
+MODULE_ESP32_DEVKIT_V1_NO_WIFI_No_Hole
 
 
 0

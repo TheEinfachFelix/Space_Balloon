@@ -5753,9 +5753,10 @@
 				(font
 					(size 1.27 1.27)
 				)
+				(hide yes)
 			)
 		)
-		(property "Footprint" "Felix:MODULE_ESP32_DEVKIT_V1_NO_WIFI"
+		(property "Footprint" "Felix:MODULE_ESP32_DEVKIT_V1_NO_WIFI_No_Hole"
 			(at 34.29 50.8 0)
 			(effects
 				(font
@@ -6653,7 +6654,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Felix:MODULE_ESP32_DEVKIT_V1_NO_WIFI"
+		(property "Footprint" "Felix:MODULE_ESP32_DEVKIT_V1_NO_WIFI_No_Hole"
 			(at 105.41 127 0)
 			(effects
 				(font
