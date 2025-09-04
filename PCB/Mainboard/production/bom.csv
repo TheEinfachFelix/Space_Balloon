@@ -1,0 +1,13 @@
+﻿Designator,Footprint,Quantity,Value,LCSC Part #
+BT1,BAT_BK-18650-PC8,1,BK-18650-PC8,
+"J1, J5, J6",PinHeader_1x04_P2.54mm_Vertical,3,GPS,
+J2,PinHeader_1x06_P2.54mm_Vertical,1,AS7265X,
+J3,PinHeader_1x03_P2.54mm_Vertical,1,UV,
+J4,PinHeader_1x10_P2.54mm_Vertical,1,ADS1115,
+J7,PinHeader_1x06_P2.54mm_Vertical,1,SD-Card,
+Q1,SOT-23,1,AO3400A,
+R1,R_Axial_DIN0411_L9.9mm_D3.6mm_P15.24mm_Horizontal,1,47K,
+R2,R_Axial_DIN0411_L9.9mm_D3.6mm_P15.24mm_Horizontal,1,220K,
+"U1, U2",MODULE_ESP32_DEVKIT_V1_NO_WIFI_No_Hole,2,ESP32-DEVKIT-V1,
+U3,MODULE_WIFI_KIT_32__V3_,1,WIFI_KIT_32__V3_,
+U4,SIM800L-CORE,1,SIM800L-CORE,
