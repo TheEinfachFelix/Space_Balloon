@@ -42,6 +42,7 @@ Der ESP soll alle X Minuten das machen:
 
 ## Nichtfunktionale Anforderungen
 
+- **Der Code muss am Rnde in diesem Git Repo landen. Entweder via pull-request oder indem ich euch hier hinzufüge**
 - Keine Magic Values.
 - Sinnvolle Namen für Variablen.
 - Den Code sinnvoll in Funktionen aufteilen (z. B.: `setupGPS()`, `getGPSdata()` usw.).
