@@ -1,0 +1,6 @@
+[submodule "Sim800L-Arduino-Library-revised"]
+	path = Sim800L-Arduino-Library-revised
+	url = https://github.com/TheEinfachFelix/Sim800L-Arduino-Library-revised
+[submodule "Code/SimESP/src/Sim800L-Arduino-Library-revised"]
+	path = Code/SimESP/src/Sim800L-Arduino-Library-revised
+	url = https://github.com/TheEinfachFelix/Sim800L-Arduino-Library-revised
