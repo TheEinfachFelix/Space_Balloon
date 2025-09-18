@@ -4,8 +4,10 @@
 #include <SoftwareSerial.h> 
              
 
-#define GSM_RX  7
-#define GSM_TX  6
+#define GSM_RX  16
+#define GSM_TX  17
+#define GSM_RST 22
+#define GSM_Sleep 23
 
 Sim800L GSM(GSM_RX, GSM_TX);
 
@@ -19,7 +21,7 @@ void setup() {
   //GSM.Debug = true; // Enable debug mode to see AT command responses in Serial Monitor
   Serial.begin(9600);
 
-  String pin = "9305";
+  String pin = "2250";
 
   if (GSM.setPIN(pin)) Serial.println("Pin set");
   else Serial.println("Pin NOT set");
