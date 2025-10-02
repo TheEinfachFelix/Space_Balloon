@@ -1,13 +1,15 @@
 (kicad_sch
-	(version 20231120)
+	(version 20250114)
 	(generator "eeschema")
-	(generator_version "8.0")
+	(generator_version "9.0")
 	(uuid "c7349d27-2861-4473-95f2-90c30085d618")
 	(paper "A4")
 	(lib_symbols
 		(symbol "Connector:Conn_01x04_Pin"
 			(pin_names
-				(offset 1.016) hide)
+				(offset 1.016)
+				(hide yes)
+			)
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
@@ -81,21 +83,53 @@
 				)
 			)
 			(symbol "Conn_01x04_Pin_1_1"
-				(polyline
-					(pts
-						(xy 1.27 -5.08) (xy 0.8636 -5.08)
-					)
+				(rectangle
+					(start 0.8636 2.667)
+					(end 0 2.413)
 					(stroke
 						(width 0.1524)
 						(type default)
 					)
 					(fill
-						(type none)
+						(type outline)
+					)
+				)
+				(rectangle
+					(start 0.8636 0.127)
+					(end 0 -0.127)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type outline)
+					)
+				)
+				(rectangle
+					(start 0.8636 -2.413)
+					(end 0 -2.667)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type outline)
+					)
+				)
+				(rectangle
+					(start 0.8636 -4.953)
+					(end 0 -5.207)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type outline)
 					)
 				)
 				(polyline
 					(pts
-						(xy 1.27 -2.54) (xy 0.8636 -2.54)
+						(xy 1.27 2.54) (xy 0.8636 2.54)
 					)
 					(stroke
 						(width 0.1524)
@@ -119,7 +153,7 @@
 				)
 				(polyline
 					(pts
-						(xy 1.27 2.54) (xy 0.8636 2.54)
+						(xy 1.27 -2.54) (xy 0.8636 -2.54)
 					)
 					(stroke
 						(width 0.1524)
@@ -129,48 +163,16 @@
 						(type none)
 					)
 				)
-				(rectangle
-					(start 0.8636 -4.953)
-					(end 0 -5.207)
+				(polyline
+					(pts
+						(xy 1.27 -5.08) (xy 0.8636 -5.08)
+					)
 					(stroke
 						(width 0.1524)
 						(type default)
 					)
 					(fill
-						(type outline)
-					)
-				)
-				(rectangle
-					(start 0.8636 -2.413)
-					(end 0 -2.667)
-					(stroke
-						(width 0.1524)
-						(type default)
-					)
-					(fill
-						(type outline)
-					)
-				)
-				(rectangle
-					(start 0.8636 0.127)
-					(end 0 -0.127)
-					(stroke
-						(width 0.1524)
-						(type default)
-					)
-					(fill
-						(type outline)
-					)
-				)
-				(rectangle
-					(start 0.8636 2.667)
-					(end 0 2.413)
-					(stroke
-						(width 0.1524)
-						(type default)
-					)
-					(fill
-						(type outline)
+						(type none)
 					)
 				)
 				(pin passive line
@@ -246,12 +248,17 @@
 					)
 				)
 			)
+			(embedded_fonts no)
 		)
 		(symbol "power:GND"
 			(power)
-			(pin_numbers hide)
+			(pin_numbers
+				(hide yes)
+			)
 			(pin_names
-				(offset 0) hide)
+				(offset 0)
+				(hide yes)
+			)
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
@@ -342,6 +349,7 @@
 					)
 				)
 			)
+			(embedded_fonts no)
 		)
 	)
 	(wire
@@ -377,7 +385,6 @@
 	(hierarchical_label "RX"
 		(shape input)
 		(at 134.62 106.68 90)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -389,7 +396,6 @@
 	(hierarchical_label "VCC"
 		(shape input)
 		(at 132.08 106.68 90)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -401,7 +407,6 @@
 	(hierarchical_label "TX"
 		(shape input)
 		(at 137.16 106.68 90)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -469,12 +474,12 @@
 		)
 		(instances
 			(project "Mainboard"
-				(path "/2e068214-66f3-41bd-beea-f3af3145335c/a232a830-9c14-48b1-81a5-d9272c439a92"
-					(reference "#PWR02")
-					(unit 1)
-				)
 				(path "/2e068214-66f3-41bd-beea-f3af3145335c/870c4703-c4cd-4d8b-9509-4e4f0c7e7c0f"
 					(reference "#PWR010")
+					(unit 1)
+				)
+				(path "/2e068214-66f3-41bd-beea-f3af3145335c/a232a830-9c14-48b1-81a5-d9272c439a92"
+					(reference "#PWR02")
 					(unit 1)
 				)
 			)
@@ -547,12 +552,12 @@
 		)
 		(instances
 			(project "Mainboard"
-				(path "/2e068214-66f3-41bd-beea-f3af3145335c/a232a830-9c14-48b1-81a5-d9272c439a92"
-					(reference "J1")
-					(unit 1)
-				)
 				(path "/2e068214-66f3-41bd-beea-f3af3145335c/870c4703-c4cd-4d8b-9509-4e4f0c7e7c0f"
 					(reference "J5")
+					(unit 1)
+				)
+				(path "/2e068214-66f3-41bd-beea-f3af3145335c/a232a830-9c14-48b1-81a5-d9272c439a92"
+					(reference "J1")
 					(unit 1)
 				)
 			)
