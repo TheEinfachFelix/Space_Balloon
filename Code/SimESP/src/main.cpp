@@ -1,59 +1,40 @@
 #include <Arduino.h>
-#include "Sim800L/Sim800.hpp"
-#include <SoftwareSerial.h> 
-             
+#include "Sim800L/SIM800.hpp"
+#include "Sim800L/SIM800Client.hpp"
 
-#define GSM_RX  16
-#define GSM_TX  17
-#define GSM_RST 22
-#define GSM_delay 23
-
-Sim800L GSM(GSM_RX, GSM_TX);
-
-char* text;
-char* number;
-bool error; 
-char* Inhalt_SMS;
+SIM800 modem;
+SIM800Client client(modem);
 
 void setup() {
-  GSM.begin(); 			
-  GSM.setDebugMode(true);
-  Serial.begin(9600);
+    Serial.begin(115200);
+    Serial2.begin(9600, SERIAL_8N1, 16, 17);
+    modem.begin(Serial2);
 
-  String pin = "2250";
-  if (GSM.checkStatus().indexOf("READY") == -1) {
-      if (GSM.setPIN(pin)) Serial.println("Pin set");
-      else Serial.println("Pin NOT set");
-  }
-  delay(100);
-  GSM.checkStatus();
-  delay(8000); //wait for the module to be ready
-  //
-  Serial.println("get Operator"); //ping the module to check if it is ready
-  Serial.println(GSM.getOperator());
-  delay(100);
-  Serial.println(GSM.signalQuality());
-  delay(100);
-	text="Testing Sms";  		//text for the message. 
-	number="+4916094842537"; 		//change to a valid number.
-	//error=GSM.sendSms(number,text);
-  //delay(100);
-  Serial.println("Message sent"); //message sent
-  Serial.println(error); //error is true if the message was sent, false if not.
-	GSM.getCallStatus();
+    modem.enableDebug(Serial);   // Low-level Verkehr
+    client.enableDebug(Serial);  // High-level Feedback
 
-  //GSM.callNumber(number);
-  Serial.println("call"); //message sent
-	// OR 
-	//Sim800L.sendSms("+540111111111","the text go here")
-  GSM.checkStatus();
-  delay(100);
+    auto r = client.testAT();
+    if (r.result == SIM800Result::SUCCESS) Serial.println("Modem OK");
+
+    if (client.setPin("2250").result == SIM800Result::SUCCESS) {
+        Serial.println("SIM unlocked");
+    } else {
+        Serial.println("SIM unlock failed or not needed");
+    }
+
+    CSQInfo csq;
+    if (client.getSignalQuality(csq)) {
+        Serial.printf("Signal: RSSI=%d, BER=%d\n", csq.rssi, csq.ber);
+    }
+
+    CREGInfo creg;
+    if (client.getNetworkRegistration(creg)) {
+        Serial.printf("Network: n=%d, stat=%d\n", creg.n, creg.stat);
+    }
+
+    client.sendSMS("+4916094842537", "Hello from ESP32!"); // <-- eigene Nummer eintragen
 }
 
 void loop() {
-  Inhalt_SMS = "GPSDaten"; // holt sich GPS Daten
-  GSM.sendSms(number, Inhalt_SMS); // Sendet die GPS Daten per SMS
-  Serial.println(Inhalt_SMS); // Weils so schön ist, printet er die nochmal
-  delay(300000); // 8 min warten
-  // put your main code here, to run repeatedly:
+    modem.loop();
 }
