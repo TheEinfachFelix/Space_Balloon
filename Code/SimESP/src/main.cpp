@@ -1,6 +1,7 @@
 #include <Arduino.h>
 #include "Sim800L/SIM800.hpp"
 #include "Sim800L/SIM800Client.hpp"
+#include "gps.hpp"
 
 SIM800 modem;
 SIM800Client client(modem);
@@ -13,14 +14,15 @@ void setup() {
     Serial.begin(115200);
     Serial2.begin(9600, SERIAL_8N1, 16, 17);
     modem.begin(Serial2, 9600, 23, 22); // DTR an Pin 23, RTS an Pin 22
+    setUpGPS(3, 1);
 
     modem.enableDebug(Serial);   // Low-level Verkehr
     client.enableDebug(Serial);  // High-level Feedback
 
   // Run
 
-    // TODO: READ GPS and send to sleep
-    String gpsData = "Test";
+    
+    String gpsData = "Lon: " + String(readLongitude(), 6) + ", Lat: " + String(readLatitude(), 6) + ", Alt: " + String(readAltitude(), 1) + "m, Speed: " + String(readSpeed(), 1) + "km/h";
 
 
     client.wakeUp();
