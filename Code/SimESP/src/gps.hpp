@@ -2,6 +2,7 @@
 #include <Arduino.h>
 #include <TinyGPS++.h>
 #include <ctime>
+#include <SoftwareSerial.h>
 
 #define GPS_BAUD 9600
 
@@ -13,5 +14,3 @@ double readLongitude();
 double readAltitude();
 double readSpeed();
 std::tm readDateTime();
-
-// Hier musst du gucken weche methoden du brauchst

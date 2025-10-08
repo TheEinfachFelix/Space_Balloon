@@ -1,10 +1,10 @@
 #include "gps.hpp"
 
 TinyGPSPlus gps;
-HardwareSerial gpsSerial(2);
+SoftwareSerial gpsSerial;
 
 bool setUpGPS(int rx, int tx) {
-    gpsSerial.begin(GPS_BAUD, SERIAL_8N1, rx, tx);
+    gpsSerial.begin(GPS_BAUD, SWSERIAL_8N1, rx, tx);
 
     unsigned long start = millis();
     while (millis() - start < 6000) {
@@ -54,10 +54,13 @@ double readAltitude() {
 // Liest die Geschwindigkeit in km/h
 double readSpeed() {
     if (gps.speed.isValid()) {
+        Serial.println(gps.satellites.value());
         return gps.speed.kmph();
     }
     return NAN;
 }
+
+
 
 // Liest Datum und Uhrzeit vom GPS
 // Gibt ein std::tm-Objekt zurück (lokale Zeit = UTC)
@@ -79,19 +82,3 @@ std::tm readDateTime() {
     return timeinfo;
 }
 
-void gpsSleep() {
-    // UBX-Befehl: Power Save Mode aktivieren
-    byte ubxPwrSave[] = {
-        0xB5, 0x62,             // UBX sync chars
-        0x06, 0x3B,             // CFG-RXM
-        0x02, 0x00,             // length
-        0x08, 0x01,             // payload: power save mode
-        0x11, 0x6C              // checksum
-    };
-    gpsSerial.write(ubxPwrSave, sizeof(ubxPwrSave));
-}
-
-void gpsWake() {
-    // Ein beliebiges Byte auf TX schicken, um das Modul zu wecken
-    gpsSerial.write(0xFF);
-}
