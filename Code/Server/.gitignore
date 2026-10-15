@@ -1,0 +1,57 @@
+# ==========================================
+# SECRETS & ENVIRONMENT
+# ==========================================
+# Schützt deine Passwörter und Tokens vor dem Commit.
+# Die .env.sample bleibt aber erhalten!
+.env
+!.env.sample
+
+# ==========================================
+# PYTHON & UV
+# ==========================================
+# Virtuelle Umgebungen von uv / pip
+.venv/
+venv/
+ENV/
+.uv/
+
+# Python Cache-Dateien
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.pytest_cache/
+.ruff_cache/
+
+# Build- und Paketierungs-Artefakte
+dist/
+build/
+*.egg-info/
+.eggs/
+
+# ==========================================
+# DOCKER & DATENBANKEN
+# ==========================================
+# Falls du lokale Ordner als Docker-Volumes mountest (z.B. für persistente DBs)
+influxdb_data/
+grafana_data/
+reticulum_storage/
+
+# ==========================================
+# IDEs & BETRIEBSSYSTEME
+# ==========================================
+# VS Code
+.vscode/
+*.code-workspace
+
+# JetBrains (PyCharm etc.)
+.idea/
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# macOS
+.DS_Store

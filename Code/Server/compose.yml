@@ -1,21 +1,112 @@
-# Diese Datei enthält die Konfiguration und Orchestrierung für Server.
+services:
+  # ---------------------------------------------------------------------------
+  # 1. InfluxDB (Zeitreihendatenbank für Sensor- und Telemetriedaten)
+  # ---------------------------------------------------------------------------
+  influxdb:
+    image: influxdb:2.7-alpine
+    container_name: space_influxdb
+    restart: unless-stopped
+    ports:
+      - "8086:8086"
+    environment:
+      - DOCKER_INFLUXDB_INIT_MODE=setup
+      - DOCKER_INFLUXDB_INIT_USERNAME=${INFLUXDB_USER}
+      - DOCKER_INFLUXDB_INIT_PASSWORD=${INFLUXDB_PASSWORD}
+      - DOCKER_INFLUXDB_INIT_ORG=${INFLUXDB_ORG}
+      - DOCKER_INFLUXDB_INIT_BUCKET=${INFLUXDB_BUCKET}
+    volumes:
+      - influxdb_data:/var/lib/influxdb2
+    networks:
+      - space_net
 
-# Mesh Connector 
+  # ---------------------------------------------------------------------------
+  # 2. Grafana (Visualisierung der InfluxDB-Daten)
+  # ---------------------------------------------------------------------------
+  grafana:
+    image: grafana/grafana-oss:latest
+    container_name: space_grafana
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=${GRAFANA_USER}
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD}
+    volumes:
+      - grafana_data:/var/lib/grafana
+      # Optional: Falls du Dashboards/Datasources direkt aus dem Ordner mounten willst
+      - ./Grafana:/etc/grafana/provisioning
+    depends_on:
+      - influxdb
+    networks:
+      - space_net
 
+  # ---------------------------------------------------------------------------
+  # 3. ReticulumBridge (Die zentrale Middleware)
+  #    Verwaltet das Reticulum-Netzwerk, schreibt Daten in InfluxDB & leitet Befehle weiter
+  # ---------------------------------------------------------------------------
+  reticulum-bridge:
+    build: ./ReticulumBridge
+    container_name: space_reticulum_bridge
+    restart: unless-stopped
+    volumes:
+      - ./config.yml:/app/config.yml:ro
+      # Wichtig: Reticulum speichert Krypto-Identitäten und Konfigurationen im Home-Verzeichnis
+      - reticulum_storage:/root/.reticulum
+    environment:
+      - INFLUXDB_TOKEN=${INFLUXDB_TOKEN}
+    depends_on:
+      - influxdb
+    networks:
+      - space_net
 
-# Cell Connector
+  # ---------------------------------------------------------------------------
+  # 4. Python-Anwendungen (CellCon, Controllcenter, MeshCon)
+  #    Sprechen intern mit der Middleware oder direkt mit der InfluxDB
+  # ---------------------------------------------------------------------------
+  cellcon:
+    build: ./CellCon
+    container_name: space_cellcon
+    restart: unless-stopped
+    volumes:
+      - ./config.yml:/app/config.yml:ro
+    depends_on:
+      - reticulum-bridge
+    networks:
+      - space_net
 
+  controllcenter:
+    build: ./Controllcenter
+    container_name: space_controllcenter
+    restart: unless-stopped
+    volumes:
+      - ./config.yml:/app/config.yml:ro
+    depends_on:
+      - reticulum-bridge
+    networks:
+      - space_net
 
-# Reticulum Bridge
+  meshcon:
+    build: ./MeshCon
+    container_name: space_meshcon
+    restart: unless-stopped
+    volumes:
+      - ./config.yml:/app/config.yml:ro
+    depends_on:
+      - reticulum-bridge
+    networks:
+      - space_net
 
+# ---------------------------------------------------------------------------
+# Volumes für persistente Daten (Datenbanken & Krypto-Keys)
+# ---------------------------------------------------------------------------
+volumes:
+  influxdb_data:
+  grafana_data:
+  reticulum_storage:
 
-# Datenbank
-
-
-# Grafana
-
-
-# Controllcenter
-
-
-# (OPT) Flightplotter
+# ---------------------------------------------------------------------------
+# Internes Netzwerk, damit die Container untereinander kommunizieren können
+# ---------------------------------------------------------------------------
+networks:
+  space_net:
+    driver: bridge
