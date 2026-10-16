@@ -48,6 +48,8 @@ services:
     build: ./ReticulumBridge
     container_name: space_reticulum_bridge
     restart: unless-stopped
+    ports:
+      - "4444:4444"
     volumes:
       - ./config.yml:/app/config.yml:ro
       # Wichtig: Reticulum speichert Krypto-Identitäten und Konfigurationen im Home-Verzeichnis
@@ -60,34 +62,13 @@ services:
       - space_net
 
   # ---------------------------------------------------------------------------
-  # 4. Python-Anwendungen (CellCon, Controllcenter, MeshCon)
+  # 4. Python-Anwendungen (Controllcenter)
   #    Sprechen intern mit der Middleware oder direkt mit der InfluxDB
   # ---------------------------------------------------------------------------
-  cellcon:
-    build: ./CellCon
-    container_name: space_cellcon
-    restart: unless-stopped
-    volumes:
-      - ./config.yml:/app/config.yml:ro
-    depends_on:
-      - reticulum-bridge
-    networks:
-      - space_net
 
   controllcenter:
     build: ./Controllcenter
     container_name: space_controllcenter
-    restart: unless-stopped
-    volumes:
-      - ./config.yml:/app/config.yml:ro
-    depends_on:
-      - reticulum-bridge
-    networks:
-      - space_net
-
-  meshcon:
-    build: ./MeshCon
-    container_name: space_meshcon
     restart: unless-stopped
     volumes:
       - ./config.yml:/app/config.yml:ro
