@@ -11,7 +11,7 @@ ENV UV_LINK_MODE=copy
 # 1. Zuerst nur die Projekt-Metadaten und die Lockfile kopieren
 COPY pyproject.toml uv.lock .python-version README.md ./
 
-# 2. Abhängigkeiten installieren (ohne den eigentlichen src-Code), 
+# 2. Abhängigkeiten installieren (ohne den eigentlichen src-Code),
 # damit dieser Schritt im Docker-Cache bleibt, wenn du später Code änderst.
 RUN uv sync --frozen --no-dev --no-install-project
 

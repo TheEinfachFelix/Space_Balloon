@@ -22,7 +22,7 @@ bool setUpGPS(int rx, int tx) {
 
 void updateGPS()
 {
-  if (gpsSerial.available()) 
+  if (gpsSerial.available())
   {
     gps.encode(gpsSerial.read());
   }
@@ -81,4 +81,3 @@ std::tm readDateTime() {
 
     return timeinfo;
 }
-

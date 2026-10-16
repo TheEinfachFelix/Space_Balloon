@@ -7,4 +7,3 @@ Dies verbindet die Welten des Reticulums mit den anderen Programmen. Es werden d
 - die Brige kann via config.yml konfiguriert werden (bsp. Reticulum Identiy)
 - die Brige bietet eine REST API an und nutzt dafür FastAPI
 - die Brige schreibt ausgewählte daten in die Influx DB
-

@@ -96,6 +96,22 @@ services:
     networks:
       - space_net
 
+  # ---------------------------------------------------------------------------
+  # 5. Log Viewer (Dozzle)
+  #    Optional, um die Logs der Container in Echtzeit zu sehen - http://localhost:8080
+  # ---------------------------------------------------------------------------
+
+  dozzle:
+    image: amir20/dozzle:latest
+    container_name: space_dozzle
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - space_net
+
 # ---------------------------------------------------------------------------
 # Volumes für persistente Daten (Datenbanken & Krypto-Keys)
 # ---------------------------------------------------------------------------

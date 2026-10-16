@@ -1,5 +1,13 @@
 # Server
 
+## Setup
+
+```sh
+uv tool install pre-commit
+pre-commit install
+pre-commit
+```
+
 ## How to run server
 
 ```sh

@@ -13,7 +13,7 @@ void setup() {
   setUpGPS();
   setUpSD();
   setUpSpec();
-  
+
 }
 
 void loop() {
