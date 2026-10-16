@@ -1,0 +1,23 @@
+influxdb_shared_config:
+  url: xxxx
+  org: xxxx
+  bucket: xxx
+
+reticulum_bridge:
+  influxdb_token: xxxx
+  logging_level: "INFO"
+  api:
+    host: localhost
+    port: 8000
+
+server_1:
+  host: "192.168.178.10"
+  custom_option: true
+
+server_2:
+  irgendetwas: "beliebiger Inhalt"
+  nested:
+    foo: 123
+
+mein_objekt:
+  beliebige_daten: [1, 2, 3]
