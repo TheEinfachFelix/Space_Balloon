@@ -22,15 +22,21 @@ async def lifespan(app: FastAPI):
 
     try:
         # 2. InfluxConnector initialisieren
+        # TODO die config sollte automatisch geparst werden,
+        # sodass man nicht alles manuell zusammenbauen muss
         influx_config = InfluxConfig(
             url=settings.influxdb_shared_config.url,
             token=settings.reticulum_bridge.influxdb_token,
             org=settings.influxdb_shared_config.org,
             bucket=settings.influxdb_shared_config.bucket,
         )
+        # TODO InfluxConnector sollte in dependencies.py gespeichert werden,
+        # sodass er in den Endpunkten verwendet werden kann
         app.state.influx_connector = InfluxConnector(influx_config)
 
         # 3. ReticulumBridge initialisieren
+        # TODO ReticulumBridge sollte in dependencies.py gespeichert werden,
+        # sodass er in den Endpunkten verwendet werden kann
         app.state.reticulum_bridge = ReticulumBridge()
 
         logger.success('Alle Hintergrunddienste erfolgreich gestartet.')

@@ -7,7 +7,11 @@ authors = [
     { name = "TheEinfachFelix", email = "The.Einfach.Felix@gmail.com" }
 ]
 requires-python = ">=3.14"
-dependencies = []
+dependencies = [
+    "loguru>=0.7.3",
+    "pydantic>=2.14.1",
+    "pydantic-settings>=2.16.0",
+]
 
 [project.scripts]
 controllcenter = "controllcenter.main:main"
