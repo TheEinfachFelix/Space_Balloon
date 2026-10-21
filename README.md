@@ -11,5 +11,9 @@ https://github.com/markqvist/reticulum
 
 
 Emi
-
 Judith
+
+
+git vscode merge video raussuchen
+tests für config
+conroll initial code
