@@ -11,10 +11,11 @@ dependencies = [
     "loguru>=0.7.3",
     "pydantic>=2.14.1",
     "pydantic-settings>=2.16.0",
+    "streamlit>=1.66.1",
 ]
 
 [project.scripts]
-controllcenter = "controllcenter.main:main"
+controllcenter = "controllcenter:main"
 
 [build-system]
 requires = ["uv_build>=0.13.1,<0.14.0"]
