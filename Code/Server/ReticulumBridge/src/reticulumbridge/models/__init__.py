@@ -1,5 +1,3 @@
 from __future__ import annotations
 
-from .telemetry import TelemetryData
-
-__all__ = ['TelemetryData']
+__all__ = []

@@ -27,4 +27,5 @@ build-backend = "uv_build"
 dev = [
     "pytest>=9.1.1",
     "pytest-cov>=7.1.0",
+    "streamlit>=1.66.1",
 ]
