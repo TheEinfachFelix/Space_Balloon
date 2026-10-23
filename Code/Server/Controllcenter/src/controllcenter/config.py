@@ -21,6 +21,10 @@ class InfluxDBSharedConfig(StrictModel):
     bucket: str
 
 
+class ControllCenterConfig(StrictModel):
+    reticulum_api_url: str
+
+
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
         yaml_file='config.yml',
@@ -29,6 +33,7 @@ class Settings(BaseSettings):
     )
 
     influxdb_shared_config: InfluxDBSharedConfig
+    controllcenter_config: ControllCenterConfig
 
     @classmethod
     def settings_customise_sources(
