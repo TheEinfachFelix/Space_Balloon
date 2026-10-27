@@ -3,7 +3,9 @@ from __future__ import annotations
 import requests
 from controllcenter.config import Settings
 from controllcenter.models import TelemetryData
-from controllcenter.repository import ReticulumBridgeEndpoints
+from controllcenter.repository.reticulum_api_endpoints import (
+    ReticulumBridgeEndpoints,
+)
 from pydantic import BaseModel
 
 
