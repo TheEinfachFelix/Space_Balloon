@@ -1,0 +1,10 @@
+influxdb_shared_config:
+  url: xxxx
+  org: xxxx
+  bucket: xxx
+
+controllcenter_config:
+  reticulum_api_url: xxxx
+  logging_level: "INFO"
+
+testeintrag: dieser sollte ingnoriert werden.
