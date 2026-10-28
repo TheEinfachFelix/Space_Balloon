@@ -32,6 +32,7 @@ class ReticulumBridgeConfig(StrictModel):
     influxdb_token: str
     logging_level: Literal['DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL']
     api: APIConfig
+    reticulum_timeout_s: float
 
 
 class Settings(BaseSettings):
