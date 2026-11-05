@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from loguru import logger
+from pydantic import BaseModel
 
 
 class ReticulumBridge:
@@ -13,3 +14,9 @@ class ReticulumBridge:
         logger.info('ReticulumBridge wird beendet...')
         # Clean up resources
         logger.success('ReticulumBridge erfolgreich beendet.')
+
+    async def sendMsg(self, data: BaseModel) -> None:
+        # Daten Komprimieren und senden
+        pass
+
+    # Empfangene Daten werden dekomprimiert und an den Router geleitet

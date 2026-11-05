@@ -13,6 +13,7 @@ dependencies = [
     "loguru>=0.7.3",
     "pydantic>=2.14.1",
     "pydantic-settings>=2.16.0",
+    "pytest-asyncio>=1.4.1",
     "rns>=1.5.7",
 ]
 
