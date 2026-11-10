@@ -4,7 +4,7 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 from loguru import logger
-from reticulumbridge.core.reticulum import ReticulumBridge
+from reticulumbridge.core.reticulum_bridge import ReticulumBridge
 from reticulumbridge.dependencies import get_settings
 from reticulumbridge.services.influx import InfluxConfig
 from reticulumbridge.services.influx import InfluxConnector

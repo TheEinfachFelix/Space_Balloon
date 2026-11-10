@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "Code/Server/Controllcenter"
+		},
+		{
+			"path": "Code/Server/ReticulumBridge"
+		}
+	],
+	"settings": {}
+}
