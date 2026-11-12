@@ -9,6 +9,7 @@ from reticulumbridge.config import APIConfig
 from reticulumbridge.config import InfluxDBSharedConfig
 from reticulumbridge.config import ReticulumBridgeConfig
 from reticulumbridge.config import Settings
+from reticulumbridge.services.influx import InfluxConnector
 
 
 @pytest.fixture
@@ -51,3 +52,20 @@ def mock_reticulum_bridge():
         bridge.sendMsg = AsyncMock()
         mock_get.return_value = bridge
         yield bridge
+
+
+@pytest.fixture
+def mock_influx_client():
+    """Mockt den InfluxDBClient und dessen Write-API."""
+    with patch('reticulumbridge.services.influx.InfluxDBClient') as mock_cls:
+        mock_client = MagicMock()
+        mock_write_api = MagicMock()
+        mock_client.write_api.return_value = mock_write_api
+        mock_cls.return_value = mock_client
+        yield mock_client, mock_write_api, mock_cls
+
+
+@pytest.fixture
+def influx_connector(mock_settings, mock_influx_client):
+    """Erstellt eine InfluxConnector-Instanz mit gemocktem Client."""
+    return InfluxConnector()
