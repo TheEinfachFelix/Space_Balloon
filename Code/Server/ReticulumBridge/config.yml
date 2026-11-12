@@ -4,7 +4,9 @@ influxdb_shared_config:
   bucket: xxx
 
 reticulum_bridge:
-  influxdb_token: xxxx
+  influxdb:
+    token: xxxx
+    telemetry_measurement: "telemetry"
   logging_level: "INFO"
   api:
     host: localhost

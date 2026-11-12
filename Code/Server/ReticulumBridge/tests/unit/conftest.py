@@ -6,6 +6,7 @@ from unittest.mock import patch
 
 import pytest
 from reticulumbridge.config import APIConfig
+from reticulumbridge.config import InfluxDBConfig
 from reticulumbridge.config import InfluxDBSharedConfig
 from reticulumbridge.config import ReticulumBridgeConfig
 from reticulumbridge.config import Settings
@@ -28,8 +29,11 @@ def mock_settings():
 
         # Reticulum Bridge Config mocken
         settings.reticulum_bridge = ReticulumBridgeConfig(
-            influxdb_token='test-token-123',
             logging_level='INFO',
+            influxdb=InfluxDBConfig(
+                token='test-token-123',
+                telemetry_measurement='test-measurement',
+            ),
             api=APIConfig(
                 host='127.0.0.1',
                 port=8000,
