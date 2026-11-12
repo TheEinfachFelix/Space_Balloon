@@ -8,6 +8,7 @@ import pytest
 from reticulumbridge.config import APIConfig
 from reticulumbridge.config import InfluxDBSharedConfig
 from reticulumbridge.config import ReticulumBridgeConfig
+from reticulumbridge.config import ReticulumConfig
 from reticulumbridge.config import Settings
 
 
@@ -33,7 +34,10 @@ def mock_settings():
                 host='127.0.0.1',
                 port=8000,
             ),
-            reticulum_timeout_s=0.2,  # Standard-Test-Timeout
+            reticulum=ReticulumConfig(
+                timeout_s=0.2,  # Standard-Test-Timeout
+                config_path='test-config.yaml',
+            ),
         )
 
         mock_get.return_value = settings

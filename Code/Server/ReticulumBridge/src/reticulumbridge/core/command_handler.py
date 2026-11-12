@@ -15,7 +15,7 @@ class CommandHandler:
 
         from reticulumbridge.dependencies import get_settings
         settings = get_settings()
-        self.timeout_s = settings.reticulum_bridge.reticulum_timeout_s
+        self.timeout_s = settings.reticulum_bridge.reticulum.timeout_s
 
         logger.success('CommandHandler initialized successfully.')
 
