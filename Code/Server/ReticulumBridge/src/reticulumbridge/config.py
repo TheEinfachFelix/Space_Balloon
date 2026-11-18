@@ -33,8 +33,13 @@ class ReticulumConfig(StrictModel):
     config_path: str
 
 
+class InfluxDBConfig(StrictModel):
+    token: str
+    telemetry_measurement: str
+
+
 class ReticulumBridgeConfig(StrictModel):
-    influxdb_token: str
+    influxdb: InfluxDBConfig
     logging_level: Literal['DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL']
     api: APIConfig
     reticulum: ReticulumConfig
