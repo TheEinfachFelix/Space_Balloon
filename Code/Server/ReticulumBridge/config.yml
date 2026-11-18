@@ -11,10 +11,9 @@ reticulum_bridge:
   api:
     host: localhost
     port: 8000
-  reticulum_timeout_s: 5.0
-  #reticulum:
-  #  config_path: ./reticulum_config
-  #  timeout_s: 5.0
+  reticulum:
+    config_path: ./reticulum_config
+    timeout_s: 5.0
 
 server_1:
   host: "192.168.178.10"
