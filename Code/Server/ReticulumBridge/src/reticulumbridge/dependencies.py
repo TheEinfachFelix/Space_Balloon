@@ -33,4 +33,6 @@ def get_reticulum_bridge() -> ReticulumBridge:
 
 @cache
 def get_influx_connector() -> InfluxConnector:
-    return InfluxConnector()
+    connector = InfluxConnector()
+    get_reticulum_router().register_route(connector)
+    return connector

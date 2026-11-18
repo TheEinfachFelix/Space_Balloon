@@ -6,6 +6,7 @@ from fastapi import FastAPI
 from loguru import logger
 from reticulumbridge.dependencies import get_influx_connector
 from reticulumbridge.dependencies import get_reticulum_bridge
+from reticulumbridge.test_data_sender import simulate_telemetry_random_walk
 
 
 @asynccontextmanager
@@ -27,6 +28,8 @@ async def lifespan(app: FastAPI):
     except Exception as e:
         logger.critical(f"Kritischer Fehler beim Starten der Services: {e}")
         raise e
+
+    simulate_telemetry_random_walk()
 
     yield  # Die FastAPI-App läuft
 

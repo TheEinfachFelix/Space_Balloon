@@ -3,6 +3,7 @@ from __future__ import annotations
 from datetime import datetime
 from datetime import timezone
 from unittest.mock import MagicMock
+from unittest.mock import patch
 
 import pytest
 from reticulumbridge.services.influx import InfluxConnector
@@ -23,11 +24,12 @@ def test_influx_connector_init_uses_config(
     )
 
 
-def test_influx_connector_write_data_uses_correct_parameters(
+def test_influx_connector_write_telemetry_uses_correct_parameters(
         mock_settings,
         mock_influx_client,
 ):
-    """Testet, ob write_data das TelemetryData-Model korrekt verarbeitet"""
+    """Testet, ob write_telemetry das
+    TelemetryData-Model korrekt verarbeitet"""
     mock_client, mock_write_api, _ = mock_influx_client
 
     expected_measurement = 'space_balloon_telemetry'
@@ -48,7 +50,7 @@ def test_influx_connector_write_data_uses_correct_parameters(
     telemetry_data.pressure = 1013.25
 
     # Methode aufrufen
-    connector.write_data(telemetry_data)
+    connector.write_telemetry(telemetry_data)
 
     # Prüfen, ob die Write-API aufgerufen wurde
     mock_client.write_api.assert_called_once()
@@ -77,7 +79,7 @@ def test_influx_connector_destructor_closes_connection(
     mock_client.close.assert_called_once()
 
 
-def test_influx_connector_write_data_handles_error(
+def test_influx_connector_write_telemetry_handles_error(
         influx_connector,
         mock_influx_client,
 ):
@@ -88,4 +90,22 @@ def test_influx_connector_write_data_handles_error(
     telemetry_data = MagicMock()
 
     with pytest.raises(Exception, match='Connection lost'):
-        influx_connector.write_data(telemetry_data)
+        influx_connector.write_telemetry(telemetry_data)
+
+
+def test_influx_connector_logs_async_write_error(
+        influx_connector,
+        mock_influx_client,
+):
+    mock_client, _, _ = mock_influx_client
+    influx_connector.write_telemetry(MagicMock())
+    error_callback = mock_client.write_api.call_args.kwargs['error_callback']
+    error = Exception('Unauthorized')
+
+    with patch('reticulumbridge.services.influx.logger') as mock_logger:
+        error_callback('config', 'data', error)
+
+    mock_logger.opt.assert_called_once_with(exception=error)
+    mock_logger.opt.return_value.error.assert_called_once_with(
+        'Fehler beim asynchronen Schreiben in InfluxDB',
+    )
