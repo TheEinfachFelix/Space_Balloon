@@ -4,7 +4,7 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 from loguru import logger
-from Code.Server.ReticulumBridge.src.reticulumbridge.core.reticulum_bridge import ReticulumBridge
+from reticulumbridge.core.reticulum_bridge import ReticulumBridge
 from reticulumbridge.dependencies import get_settings
 from reticulumbridge.services.influx import InfluxConfig
 from reticulumbridge.services.influx import InfluxConnector
@@ -16,33 +16,21 @@ async def lifespan(app: FastAPI):
     Lifespan-Kontextmanager: Initialisiert beim Start alle Dienste
     und räumt sie beim Herunterfahren auf.
     """
-    settings = get_settings()
-
     logger.info('ReticulumBridge wird gestartet...')
 
     try:
         # 2. InfluxConnector initialisieren
-        # TODO die config sollte automatisch geparst werden,
-        # sodass man nicht alles manuell zusammenbauen muss
-        influx_config = InfluxConfig(
-            url=settings.influxdb_shared_config.url,
-            token=settings.reticulum_bridge.influxdb_token,
-            org=settings.influxdb_shared_config.org,
-            bucket=settings.influxdb_shared_config.bucket,
-        )
-        # TODO InfluxConnector sollte in dependencies.py gespeichert werden,
-        # sodass er in den Endpunkten verwendet werden kann
-        app.state.influx_connector = InfluxConnector(influx_config)
+        app.state.influx_connector = get_influx_connector()
 
         # 3. ReticulumBridge initialisieren
-        # TODO ReticulumBridge sollte in dependencies.py gespeichert werden,
-        # sodass er in den Endpunkten verwendet werden kann
-        app.state.reticulum_bridge = ReticulumBridge()
+        app.state.reticulum_bridge = get_reticulum_bridge()
 
         logger.success('Alle Hintergrunddienste erfolgreich gestartet.')
     except Exception as e:
         logger.critical(f"Kritischer Fehler beim Starten der Services: {e}")
         raise e
+
+    simulate_telemetry_random_walk()
 
     yield  # Die FastAPI-App läuft
 

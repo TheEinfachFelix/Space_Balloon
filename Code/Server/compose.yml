@@ -14,6 +14,7 @@ services:
       - DOCKER_INFLUXDB_INIT_PASSWORD=${INFLUXDB_PASSWORD}
       - DOCKER_INFLUXDB_INIT_ORG=${INFLUXDB_ORG}
       - DOCKER_INFLUXDB_INIT_BUCKET=${INFLUXDB_BUCKET}
+      - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=${INFLUXDB_TOKEN}
     volumes:
       - influxdb_data:/var/lib/influxdb2
     networks:
