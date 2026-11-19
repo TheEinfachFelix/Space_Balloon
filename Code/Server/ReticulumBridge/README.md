@@ -19,6 +19,10 @@ aktuell dieselbe Feldstruktur haben.
 {"type": "command", "data": {"timestamp": "2025-01-01T00:00:00Z", "id": 42}}
 ```
 
+Die Live-Demo sendet regelmäßig Telemetrie sowie die Befehle `ping`,
+`get_status` und `set_mode`. Die Demo-Gegenstelle beantwortet jeden Befehl;
+`receiveMsg` verarbeitet ausschließlich diese Antworten.
+
 HTTP-Anfragen werden mit Methode, Pfad, Statuscode und Laufzeit protokolliert.
 Fehlerantworten ab Statuscode 400 werden als Warnung geloggt; Antwortinhalte
 und Header werden zum Schutz sensibler Daten nicht mitgeschrieben.
