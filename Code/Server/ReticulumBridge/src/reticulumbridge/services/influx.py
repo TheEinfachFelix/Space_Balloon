@@ -3,7 +3,7 @@ from __future__ import annotations
 from influxdb_client.client.influxdb_client import InfluxDBClient
 from loguru import logger
 from reticulumbridge.core.reticulum_router import reticulum_response_route
-from reticulumbridge.models import TelemetryData
+from reticulumbridge.models import TelemetryData, ResponseData
 
 
 class InfluxConnector:
@@ -14,13 +14,17 @@ class InfluxConnector:
 
         self.url = settings.influxdb_shared_config.url
         self.token = settings.reticulum_bridge.influxdb.token
+
         self.org = settings.influxdb_shared_config.org
         self.bucket = settings.influxdb_shared_config.bucket
-        self.measurement = (
+        self.telemetry_measurement = (
             settings.reticulum_bridge.
             influxdb.telemetry_measurement
         )
-
+        self.command_measurement = (
+            settings.reticulum_bridge.
+            influxdb.command_measurement
+        )
         self.client = InfluxDBClient(
             url=self.url,
             token=self.token,
@@ -37,19 +41,11 @@ class InfluxConnector:
         except Exception as e:
             logger.error(f"Fehler beim Schließen des InfluxDB-Clients: {e}")
 
-    @reticulum_response_route('telemetry')
-    def write_telemetry(self, telemetry_data: TelemetryData) -> None:
-        logger.debug(f"Schreibe Daten in InfluxDB: {telemetry_data}")
+    def _write_to_db(self, node_name: str, timestamp: str, fields: dict, measurement: str) -> None:
+        logger.debug(f"Schreibe Daten in InfluxDB: {node_name}, {timestamp}, {fields}")
         try:
-            node_name = str(telemetry_data.node_name)
-            timestamp = telemetry_data.timestamp
-
-            fields = telemetry_data.model_dump(
-                exclude={'node_name', 'timestamp'},
-            )
-
             record = {
-                'measurement': self.measurement,
+                'measurement': measurement,
                 'tags': {'node_name': node_name},
                 'fields': fields,
                 'time': timestamp,
@@ -68,6 +64,30 @@ class InfluxConnector:
         except Exception as e:
             logger.error(f"Fehler beim Schreiben in InfluxDB: {e}")
             raise
+
+    @reticulum_response_route('telemetry')
+    def write_telemetry(self, telemetry_data: TelemetryData) -> None:
+        node_name = str(telemetry_data.node_name)
+        timestamp = telemetry_data.timestamp
+
+        fields = telemetry_data.model_dump(
+            exclude={'node_name', 'timestamp'},
+        )
+
+        self._write_to_db(node_name, timestamp, fields, self.telemetry_measurement)
+
+    @reticulum_response_route('response')
+    def write_response(self, response_data: ResponseData) -> None:
+            
+        node_name = str(response_data.node_name)
+        timestamp = response_data.timestamp
+
+        fields = response_data.model_dump(
+            exclude={'node_name', 'timestamp','result'},
+        )
+        fields['result'] = str(response_data.result)
+
+        self._write_to_db(node_name, timestamp, fields, self.command_measurement)
 
     @staticmethod
     def _log_async_write_error(

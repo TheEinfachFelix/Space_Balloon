@@ -1,12 +1,13 @@
 influxdb_shared_config:
   url: http://localhost:8086
-  org: einfach-technik
+  org: sgy-dt
   bucket: space_balloon
 
 reticulum_bridge:
   influxdb:
     token: dein_influxdb_api_token
     telemetry_measurement: "telemetry"
+    command_measurement: "command"
   logging_level: "INFO"
   api:
     host: localhost

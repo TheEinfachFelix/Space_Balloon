@@ -36,6 +36,7 @@ class ReticulumConfig(StrictModel):
 class InfluxDBConfig(StrictModel):
     token: str
     telemetry_measurement: str
+    command_measurement: str
 
 
 class ReticulumBridgeConfig(StrictModel):

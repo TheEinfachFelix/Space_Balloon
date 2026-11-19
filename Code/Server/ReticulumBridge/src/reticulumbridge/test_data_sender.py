@@ -8,7 +8,7 @@ from datetime import timezone
 
 from loguru import logger
 from reticulumbridge.dependencies import get_reticulum_router
-from reticulumbridge.models import TelemetryData
+from reticulumbridge.models import TelemetryData, ResponseData
 
 
 def _run_in_new_loop(node_name: str, interval: float, start_value: float):
@@ -78,6 +78,17 @@ async def _simulate_telemetry_random_walk(
             # Router-Aufruf
             router = get_reticulum_router()
             router.route_message('telemetry', data=data)
+
+            response = ResponseData(
+                timestamp=datetime.now(timezone.utc).isoformat(),
+                id=random.randint(1, 1000),
+                node_name=node_name,
+                success=True,
+                message='Telemetrie erfolgreich gesendet',
+                result={'test_field_1': round(current_value, 2)},
+            )  
+
+            router.route_message('response', data=response)
 
             logger.info(
                 f"[{data.timestamp}] Gesendet via Router: {data.model_dump()}",
