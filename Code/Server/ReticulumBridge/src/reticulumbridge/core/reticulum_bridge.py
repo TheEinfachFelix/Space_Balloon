@@ -2,8 +2,8 @@ from __future__ import annotations
 
 import RNS
 from loguru import logger
-from pydantic import BaseModel
-
+from reticulumbridge.models import CommandData
+from reticulumbridge.core.reticulum_router import reticulum_response_route
 
 class ReticulumBridge:
     def __init__(self):
@@ -24,7 +24,8 @@ class ReticulumBridge:
         # Clean up resources
         logger.success('ReticulumBridge erfolgreich beendet.')
 
-    async def sendMsg(self, data: BaseModel) -> None:
+    @reticulum_response_route("send")
+    async def sendMsg(self, data: CommandData) -> None:
         # Daten Komprimieren und senden
         pass
 

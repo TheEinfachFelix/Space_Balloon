@@ -3,7 +3,7 @@ from __future__ import annotations
 from influxdb_client.client.influxdb_client import InfluxDBClient
 from loguru import logger
 from reticulumbridge.core.reticulum_router import reticulum_response_route
-from reticulumbridge.models import TelemetryData, ResponseData
+from reticulumbridge.models import TelemetryData, ResponseData, CommandData
 
 
 class InfluxConnector:
@@ -86,6 +86,19 @@ class InfluxConnector:
             exclude={'node_name', 'timestamp','result'},
         )
         fields['result'] = str(response_data.result)
+
+        self._write_to_db(node_name, timestamp, fields, self.command_measurement)
+
+    @reticulum_response_route('send')
+    def write_send(self, send_data: CommandData) -> None:
+            
+        node_name = str(send_data.node_name)
+        timestamp = send_data.timestamp
+
+        fields = send_data.model_dump(
+            exclude={'node_name', 'timestamp','parameters'},
+        )
+        fields['parameters'] = str(send_data.parameters)
 
         self._write_to_db(node_name, timestamp, fields, self.command_measurement)
 

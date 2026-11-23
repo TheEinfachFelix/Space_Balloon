@@ -28,7 +28,9 @@ def get_command_handler() -> CommandHandler:
 
 @cache
 def get_reticulum_bridge() -> ReticulumBridge:
-    return ReticulumBridge()
+    bridge = ReticulumBridge()
+    get_reticulum_router().register_route(bridge)
+    return bridge
 
 
 @cache

@@ -32,6 +32,9 @@ class CommandHandler:
             # Senden an Reticulum
             from reticulumbridge.dependencies import get_reticulum_bridge
             bridge = get_reticulum_bridge()
+
+            from reticulumbridge.dependencies import get_reticulum_router
+            get_reticulum_router().route_message('send', command)
             await bridge.sendMsg(command)
 
             # Warten auf Antwort mit konfigurierbarem Timeout
