@@ -9,6 +9,7 @@ reticulum_bridge:
     telemetry_measurement: "telemetry"
     command_measurement: "command"
   logging_level: "INFO"
+  use_dummy_bridge: true
   api:
     host: localhost
     port: 8000

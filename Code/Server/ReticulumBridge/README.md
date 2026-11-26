@@ -8,6 +8,12 @@ Dies verbindet die Welten des Reticulums mit den anderen Programmen. Es werden d
 - die Brige bietet eine REST API an und nutzt dafür FastAPI
 - die Brige schreibt ausgewählte daten in die Influx DB
 
+Für lokale Tests kann `reticulum_bridge.use_dummy_bridge` in `config.yml`
+auf `true` gesetzt werden. Dann erzeugt die Dummy-Bridge zu jedem Befehl eine
+erfolgreiche Antwort und leitet sie über den Reticulum-Router weiter. Bei
+`false` wird die echte Reticulum-Bridge verwendet; `false` ist auch der
+Standardwert im Settings-Modell.
+
 ## Reticulum-Nachrichtenformat
 
 Nachrichten werden als JSON-Envelope mit einem `type`-Feld und den Modelldaten

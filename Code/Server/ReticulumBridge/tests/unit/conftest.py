@@ -34,6 +34,7 @@ def mock_settings():
             influxdb=InfluxDBConfig(
                 token='test-token-123',
                 telemetry_measurement='test-measurement',
+                command_measurement='test-command-measurement',
             ),
             api=APIConfig(
                 host='127.0.0.1',
@@ -43,6 +44,7 @@ def mock_settings():
                 timeout_s=0.2,  # Standard-Test-Timeout
                 config_path='test-config.yaml',
             ),
+            use_dummy_bridge=False,
         )
 
         mock_get.return_value = settings

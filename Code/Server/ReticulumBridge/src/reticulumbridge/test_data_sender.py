@@ -61,6 +61,7 @@ async def _simulate_telemetry_random_walk(
 
     try:
         while True:
+            return
             # Random Walk Schritt (Zufallsänderung zwischen -2.0 und +2.0)
             step = random.uniform(-2.0, 2.0)
             current_value += step

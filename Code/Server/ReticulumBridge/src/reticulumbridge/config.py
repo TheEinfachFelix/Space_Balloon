@@ -44,6 +44,7 @@ class ReticulumBridgeConfig(StrictModel):
     logging_level: Literal['DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL']
     api: APIConfig
     reticulum: ReticulumConfig
+    use_dummy_bridge: bool = False
 
 
 class Settings(BaseSettings):
