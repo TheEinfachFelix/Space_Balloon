@@ -1,20 +1,22 @@
 influxdb_shared_config:
   url: http://localhost:8086
-  org: einfach-technik
+  org: sgy-dt
   bucket: space_balloon
 
 reticulum_bridge:
   influxdb:
     token: dein_influxdb_api_token
     telemetry_measurement: "telemetry"
-  logging_level: "INFO"
+    command_measurement: "command"
+    command_id_measurement: "command_id_sequence"
+  logging_level: "DEBUG"
+  use_dummy_bridge: false
   api:
     host: localhost
     port: 8000
-  reticulum_timeout_s: 5.0
-  #reticulum:
-  #  config_path: ./reticulum_config
-  #  timeout_s: 5.0
+  reticulum:
+    config_path: ./reticulum_config
+    timeout_s: 5.0
 
 server_1:
   host: "192.168.178.10"

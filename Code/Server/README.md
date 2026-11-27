@@ -18,5 +18,6 @@ docker compose up -d --build
 ## How to run induvidual Projekts
 
 ```sh
+docker compose up -d influxdb grafana dozzle
 uv run <project-name>
 ```

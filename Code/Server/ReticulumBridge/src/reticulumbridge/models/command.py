@@ -1,9 +1,16 @@
 from __future__ import annotations
 
-from pydantic import BaseModel
+from typing import Literal
+
+from pydantic import Field
+
+from .base import BaseData
 
 
-class CommandData(BaseModel):
-    timestamp: str
-    id: int
-    # Hier können weitere Felder für Telemetriedaten hinzugefügt werden
+class CommandData(BaseData):
+    timestamp: str = ''
+    id: int = -1
+    command: Literal['ping', 'get_status', 'set_mode', 'reboot'] = 'ping'
+    parameters: dict[str, str | int | float | bool] = Field(
+        default_factory=dict,
+    )

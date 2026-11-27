@@ -4,10 +4,13 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 from loguru import logger
-from reticulumbridge.dependencies import get_influx_connector
-from reticulumbridge.dependencies import get_reticulum_bridge
-from reticulumbridge.test_data_sender import simulate_telemetry_random_walk
-
+from reticulumbridge.dependencies import (
+    get_influx_connector,
+    get_reticulum_bridge,
+)
+from reticulumbridge.test_data_sender import (
+    simulate_telemetry_random_walk,
+)
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):

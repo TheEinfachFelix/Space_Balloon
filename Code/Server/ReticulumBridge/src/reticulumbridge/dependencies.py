@@ -6,6 +6,7 @@ from reticulumbridge.config import Settings
 from reticulumbridge.core import CommandHandler
 from reticulumbridge.core import ReticulumBridge
 from reticulumbridge.core import ReticulumRouter
+from reticulumbridge.core.dummy_reticulum_bridge import DummyReticulumBridge
 from reticulumbridge.services.influx import InfluxConnector
 
 
@@ -27,8 +28,16 @@ def get_command_handler() -> CommandHandler:
 
 
 @cache
-def get_reticulum_bridge() -> ReticulumBridge:
-    return ReticulumBridge()
+def get_reticulum_bridge() -> ReticulumBridge | DummyReticulumBridge:
+    settings = get_settings()
+    bridge_type = (
+        DummyReticulumBridge
+        if settings.reticulum_bridge.use_dummy_bridge
+        else ReticulumBridge
+    )
+    bridge = bridge_type()
+    get_reticulum_router().register_route(bridge)
+    return bridge
 
 
 @cache

@@ -1,7 +1,14 @@
 {
-    "folders": [
-        {
-            "path": "Code/Server/ReticulumBridge/src/reticulumbridge"
-        }
-    ]
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "Code/Server/Controllcenter"
+		},
+		{
+			"path": "Code/Server/ReticulumBridge"
+		}
+	],
+	"settings": {}
 }

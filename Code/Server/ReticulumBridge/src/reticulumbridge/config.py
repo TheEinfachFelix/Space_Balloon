@@ -28,16 +28,24 @@ class APIConfig(StrictModel):
     port: int
 
 
+class ReticulumConfig(StrictModel):
+    timeout_s: float
+    config_path: str
+
+
 class InfluxDBConfig(StrictModel):
     token: str
     telemetry_measurement: str
+    command_measurement: str
+    command_id_measurement: str
 
 
 class ReticulumBridgeConfig(StrictModel):
     influxdb: InfluxDBConfig
     logging_level: Literal['DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL']
     api: APIConfig
-    reticulum_timeout_s: float
+    reticulum: ReticulumConfig
+    use_dummy_bridge: bool = False
 
 
 class Settings(BaseSettings):

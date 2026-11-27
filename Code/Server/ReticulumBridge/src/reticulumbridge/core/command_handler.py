@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import asyncio
+from datetime import datetime
+from datetime import timezone
 
 from loguru import logger
 from reticulumbridge.core.reticulum_router import reticulum_response_route
@@ -15,11 +17,21 @@ class CommandHandler:
 
         from reticulumbridge.dependencies import get_settings
         settings = get_settings()
-        self.timeout_s = settings.reticulum_bridge.reticulum_timeout_s
+        self.timeout_s = settings.reticulum_bridge.reticulum.timeout_s
 
         logger.success('CommandHandler initialized successfully.')
 
     async def send_command(self, command: CommandData) -> ResponseData:
+        """
+        Sendet einen Befehl an Reticulum und wartet auf die Antwort.
+        Die Id und der Timestamp werden automatisch gesetzt.
+        """
+        command.timestamp = datetime.now(timezone.utc).isoformat()
+        from reticulumbridge.dependencies import get_influx_connector
+        command.id = await asyncio.to_thread(
+            get_influx_connector().generate_id,
+        )
+
         logger.info(f"Sending command: {command}")
 
         loop = asyncio.get_running_loop()
@@ -30,9 +42,8 @@ class CommandHandler:
 
         try:
             # Senden an Reticulum
-            from reticulumbridge.dependencies import get_reticulum_bridge
-            bridge = get_reticulum_bridge()
-            await bridge.sendMsg(command)
+            from reticulumbridge.dependencies import get_reticulum_router
+            get_reticulum_router().route_message('send', command)
 
             # Warten auf Antwort mit konfigurierbarem Timeout
             response = await asyncio.wait_for(future, timeout=self.timeout_s)

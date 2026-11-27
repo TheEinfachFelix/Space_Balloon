@@ -6,7 +6,7 @@ from typing import TypeVar
 
 from loguru import logger
 
-Handler = Callable[..., None]
+Handler = Callable[..., object]
 F = TypeVar('F', bound=Handler)
 
 

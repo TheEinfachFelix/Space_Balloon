@@ -1,10 +1,8 @@
 from __future__ import annotations
 
-from pydantic import BaseModel
+from .base import BaseData
 
 
-class TelemetryData(BaseModel):
-    timestamp: str
-    node_name: str
+class TelemetryData(BaseData):
     test_field_1: float
     # Hier können weitere Felder für Telemetriedaten hinzugefügt werden

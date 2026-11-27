@@ -40,7 +40,11 @@ async def test_handle_response_resolves_future(mock_settings):
     handler._pending_commands[command_id] = future
 
     # Eine Antwort simulieren
-    response = ResponseData(id=command_id, timestamp='asdfg')
+    response = ResponseData(
+        id=command_id,
+        timestamp='asdfg',
+        node_name='test-node',
+    )
     handler._handle_response(response)
 
     # Prüfen, ob das Future aufgelöst wurde
@@ -51,22 +55,36 @@ async def test_handle_response_resolves_future(mock_settings):
 
 
 @pytest.mark.asyncio
-async def test_send_command_success(mock_settings, mock_reticulum_bridge):
+async def test_send_command_success(
+    mock_settings,
+    mock_reticulum_bridge,
+    mock_influx_connector,
+):
     """Test 4: send_command wartet
     erfolgreich auf die Antwort und gibt sie zurück."""
     handler = get_command_handler()
-    command = CommandData(id=123456, timestamp='asdfgh')
+    command = CommandData(
+        id=123456,
+        timestamp='asdfgh',
+        node_name='test-node',
+    )
+    mock_influx_connector.generate_id.return_value = command.id
 
     async def simulate_async_response():
         await asyncio.sleep(0.05)
-        response = ResponseData(id=123456, timestamp='asdfgh')
+        response = ResponseData(
+            id=123456,
+            timestamp='asdfgh',
+            node_name='test-node',
+        )
         handler._handle_response(response)
 
     asyncio.create_task(simulate_async_response())
 
     response = await handler.send_command(command)
 
-    mock_reticulum_bridge.sendMsg.assert_awaited_once_with(command)
+    mock_influx_connector.generate_id.assert_called_once_with()
+    mock_reticulum_bridge.sendMsg.assert_called_once_with(command)
     assert response.id == 123456
     assert response.timestamp == 'asdfgh'
 
@@ -75,15 +93,22 @@ async def test_send_command_success(mock_settings, mock_reticulum_bridge):
 async def test_send_command_timeout(
     mock_settings,
     mock_reticulum_bridge,
+    mock_influx_connector,
 ):
     """Test 5: send_command bricht mit Timeout ab und
     bereinigt den Pending-Eintrag."""
     handler = get_command_handler()
-    command = CommandData(id=1007, timestamp='asdfghj')
+    command = CommandData(
+        id=1007,
+        timestamp='asdfghj',
+        node_name='test-node',
+    )
+    mock_influx_connector.generate_id.return_value = command.id
 
     with pytest.raises((asyncio.TimeoutError, TimeoutError)):
         await handler.send_command(command)
 
+    mock_influx_connector.generate_id.assert_called_once_with()
     # Prüfen, ob der Eintrag trotz Timeout aufgeräumt wurde
     assert 1007 not in handler._pending_commands
 
@@ -92,17 +117,25 @@ async def test_send_command_timeout(
 async def test_send_command_cleans_up_pending_on_success(
     mock_settings,
     mock_reticulum_bridge,
+    mock_influx_connector,
 ):
     """Test 6: Sicherstellen, dass _pending_commands
     nach erfolgreichem Befehl bereinigt wird."""
     handler = get_command_handler()
-    command = CommandData(id=999, timestamp='cleanup-test')
+    command = CommandData(
+        id=999,
+        timestamp='cleanup-test',
+        node_name='test-node',
+    )
+    mock_influx_connector.generate_id.return_value = command.id
 
     async def simulate_async_response():
         await asyncio.sleep(0.02)
         handler._handle_response(
             ResponseData(
-                id=999, timestamp='cleanup-test',
+                id=999,
+                timestamp='cleanup-test',
+                node_name='test-node',
             ),
         )
 
@@ -110,6 +143,7 @@ async def test_send_command_cleans_up_pending_on_success(
 
     await handler.send_command(command)
 
+    mock_influx_connector.generate_id.assert_called_once_with()
     # Prüfen, ob das Dict für diese ID wieder leer/gereinigt ist
     assert 999 not in handler._pending_commands
 
@@ -120,7 +154,11 @@ def test_handle_response_unknown_command_id(mock_settings):
     handler = get_command_handler()
 
     # Antwort für eine ID senden, die nie registriert wurde
-    response = ResponseData(id=404, timestamp='orphan')
+    response = ResponseData(
+        id=404,
+        timestamp='orphan',
+        node_name='test-node',
+    )
 
     # Sollte ohne Exception durchlaufen
     handler._handle_response(response)
