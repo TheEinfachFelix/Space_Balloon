@@ -35,6 +35,7 @@ def mock_settings():
                 token='test-token-123',
                 telemetry_measurement='test-measurement',
                 command_measurement='test-command-measurement',
+                command_id_measurement='test-command-id-measurement',
             ),
             api=APIConfig(
                 host='127.0.0.1',

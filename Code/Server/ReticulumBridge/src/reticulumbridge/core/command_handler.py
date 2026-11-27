@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import asyncio
+from datetime import datetime
+from datetime import timezone
 
 from loguru import logger
 from reticulumbridge.core.reticulum_router import reticulum_response_route
@@ -20,6 +22,16 @@ class CommandHandler:
         logger.success('CommandHandler initialized successfully.')
 
     async def send_command(self, command: CommandData) -> ResponseData:
+        """
+        Sendet einen Befehl an Reticulum und wartet auf die Antwort.
+        Die Id und der Timestamp werden automatisch gesetzt.
+        """
+        command.timestamp = datetime.now(timezone.utc).isoformat()
+        from reticulumbridge.dependencies import get_influx_connector
+        command.id = await asyncio.to_thread(
+            get_influx_connector().generate_id,
+        )
+
         logger.info(f"Sending command: {command}")
 
         loop = asyncio.get_running_loop()

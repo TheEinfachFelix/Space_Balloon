@@ -1,11 +1,14 @@
 from __future__ import annotations
 
+from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime
 from datetime import timezone
+from types import SimpleNamespace
 from unittest.mock import MagicMock
 from unittest.mock import patch
 
 import pytest
+from influxdb_client.client.write_api import SYNCHRONOUS
 from reticulumbridge.services.influx import InfluxConnector
 
 
@@ -108,4 +111,71 @@ def test_influx_connector_logs_async_write_error(
     mock_logger.opt.assert_called_once_with(exception=error)
     mock_logger.opt.return_value.error.assert_called_once_with(
         'Fehler beim asynchronen Schreiben in InfluxDB',
+    )
+
+
+def test_generate_id_is_sequential_persistent_and_locked(
+        mock_settings,
+        mock_influx_client,
+):
+    mock_client, _, _ = mock_influx_client
+    persisted_ids = []
+
+    class FakeQueryApi:
+        def query(self, query, org):
+            assert org == mock_settings.influxdb_shared_config.org
+            assert (
+                mock_settings.reticulum_bridge.influxdb.command_id_measurement
+                in query
+            )
+            assert 'max(column: "_value")' in query
+            assert 'group(columns: [])' in query
+            current_id = persisted_ids[-1] if persisted_ids else None
+            if current_id is None:
+                return []
+            return [
+                SimpleNamespace(
+                    records=[
+                        SimpleNamespace(
+                            values={'_value': current_id},
+                            get_value=lambda: current_id,
+                        ),
+                    ],
+                ),
+            ]
+
+    class FakeWriteApi:
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *_args):
+            return None
+
+        def write(self, bucket, org, record):
+            assert bucket == mock_settings.influxdb_shared_config.bucket
+            assert org == mock_settings.influxdb_shared_config.org
+            influx_settings = mock_settings.reticulum_bridge.influxdb
+            assert (
+                record['measurement']
+                == influx_settings.command_id_measurement
+            )
+            persisted_ids.append(record['fields']['id'])
+
+    mock_client.query_api.return_value = FakeQueryApi()
+    mock_client.write_api.return_value = FakeWriteApi()
+
+    connector = InfluxConnector()
+    with ThreadPoolExecutor(max_workers=8) as executor:
+        generated_ids = list(
+            executor.map(
+                lambda _: connector.generate_id(),
+                range(20),
+            ),
+        )
+
+    assert sorted(generated_ids) == list(range(1, 21))
+    mock_client.write_api.assert_called()
+    assert all(
+        call.kwargs['write_options'] is SYNCHRONOUS
+        for call in mock_client.write_api.call_args_list
     )

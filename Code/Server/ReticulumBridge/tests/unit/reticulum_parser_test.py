@@ -15,11 +15,18 @@ from reticulumbridge.models import TelemetryData
 @pytest.mark.parametrize(
     ('model', 'message_type'),
     [
-        (CommandData(timestamp='now', id=12), 'command'),
-        (ResponseData(timestamp='now', id=12), 'response'),
+        (
+            CommandData(timestamp='now', id=12, node_name='balloon'),
+            'command',
+        ),
+        (
+            ResponseData(timestamp='now', id=12, node_name='balloon'),
+            'response',
+        ),
         (
             TelemetryData(
                 timestamp='now',
+                id=12,
                 node_name='balloon',
                 test_field_1=12.5,
             ),
@@ -42,10 +49,11 @@ def test_typeify_returns_model_for_message_type(model, message_type):
 @pytest.mark.parametrize(
     'model',
     [
-        CommandData(timestamp='now', id=12),
-        ResponseData(timestamp='now', id=12),
+        CommandData(timestamp='now', id=12, node_name='balloon'),
+        ResponseData(timestamp='now', id=12, node_name='balloon'),
         TelemetryData(
             timestamp='now',
+            id=12,
             node_name='balloon',
             test_field_1=12.5,
         ),
@@ -70,10 +78,23 @@ def test_typeify_validates_model_fields():
         typeify('{"type": "command", "data": {"timestamp": "now"}}')
 
 
+def test_command_can_be_created_without_timestamp_or_id():
+    command = CommandData(node_name='balloon')
+
+    assert command.timestamp is None
+    assert command.id is None
+
+
 def test_compress_serializes_typed_envelope():
-    command = CommandData(timestamp='now', id=12)
+    command = CommandData(timestamp='now', id=12, node_name='balloon')
 
     assert json.loads(compress(command)) == {
         'type': 'command',
-        'data': {'timestamp': 'now', 'id': 12},
+        'data': {
+            'timestamp': 'now',
+            'id': 12,
+            'node_name': 'balloon',
+            'command': 'ping',
+            'parameters': {},
+        },
     }

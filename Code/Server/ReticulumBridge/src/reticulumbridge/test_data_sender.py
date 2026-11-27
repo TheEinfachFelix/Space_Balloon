@@ -8,7 +8,8 @@ from datetime import timezone
 
 from loguru import logger
 from reticulumbridge.dependencies import get_reticulum_router
-from reticulumbridge.models import TelemetryData, ResponseData
+from reticulumbridge.models import ResponseData
+from reticulumbridge.models import TelemetryData
 
 
 def _run_in_new_loop(node_name: str, interval: float, start_value: float):
@@ -72,6 +73,7 @@ async def _simulate_telemetry_random_walk(
             # Pydantic-Objekt erstellen
             data = TelemetryData(
                 timestamp=datetime.now(timezone.utc).isoformat(),
+                id=random.randint(1, 1000),
                 node_name=node_name,
                 test_field_1=round(current_value, 2),
             )
@@ -87,7 +89,7 @@ async def _simulate_telemetry_random_walk(
                 success=True,
                 message='Telemetrie erfolgreich gesendet',
                 result={'test_field_1': round(current_value, 2)},
-            )  
+            )
 
             router.route_message('response', data=response)
 
