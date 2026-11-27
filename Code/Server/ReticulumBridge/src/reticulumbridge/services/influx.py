@@ -100,14 +100,19 @@ class InfluxConnector:
         timestamp: str | None,
         fields: dict,
         measurement: str,
+        tags: dict[str, str] | None = None,
     ) -> None:
         logger.debug(
             f"Schreibe Daten in InfluxDB: {node_name}, {timestamp}, {fields}",
         )
         try:
+            record_tags = {'node_name': node_name}
+            if tags:
+                record_tags.update(tags)
+
             record = {
                 'measurement': measurement,
-                'tags': {'node_name': node_name},
+                'tags': record_tags,
                 'fields': fields,
                 'time': timestamp,
             }
@@ -147,13 +152,17 @@ class InfluxConnector:
         timestamp = response_data.timestamp
 
         fields = response_data.model_dump(
-            exclude={'node_name', 'timestamp', 'result'},
+            exclude={'node_name', 'timestamp', 'result', 'id'},
         )
         fields['result'] = str(response_data.result)
 
         self._write_to_db(
             node_name, timestamp, fields,
             self.command_measurement,
+            tags={
+                'command_id': str(response_data.id),
+                'event_type': 'response',
+            },
         )
 
     @reticulum_response_route('send')
@@ -163,13 +172,17 @@ class InfluxConnector:
         timestamp = send_data.timestamp
 
         fields = send_data.model_dump(
-            exclude={'node_name', 'timestamp', 'parameters'},
+            exclude={'node_name', 'timestamp', 'parameters', 'id'},
         )
         fields['parameters'] = str(send_data.parameters)
 
         self._write_to_db(
             node_name, timestamp, fields,
             self.command_measurement,
+            tags={
+                'command_id': str(send_data.id),
+                'event_type': 'command',
+            },
         )
 
     @staticmethod

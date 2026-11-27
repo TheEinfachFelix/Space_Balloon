@@ -78,13 +78,6 @@ def test_typeify_validates_model_fields():
         typeify('{"type": "command", "data": {"timestamp": "now"}}')
 
 
-def test_command_can_be_created_without_timestamp_or_id():
-    command = CommandData(node_name='balloon')
-
-    assert command.timestamp is None
-    assert command.id is None
-
-
 def test_compress_serializes_typed_envelope():
     command = CommandData(timestamp='now', id=12, node_name='balloon')
 

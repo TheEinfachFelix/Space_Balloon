@@ -9,6 +9,8 @@ from unittest.mock import patch
 
 import pytest
 from influxdb_client.client.write_api import SYNCHRONOUS
+from reticulumbridge.models import CommandData
+from reticulumbridge.models import ResponseData
 from reticulumbridge.services.influx import InfluxConnector
 
 
@@ -70,6 +72,58 @@ def test_influx_connector_write_telemetry_uses_correct_parameters(
         assert record.get('measurement') == expected_measurement
         assert record.get('tags', {}).get('node_name') == test_node_name
         assert record.get('time') == test_timestamp
+
+
+@pytest.mark.parametrize(
+    ('event_type', 'write_method', 'data'),
+    [
+        (
+            'command',
+            'write_send',
+            CommandData(
+                timestamp='2026-11-12T18:00:00+00:00',
+                id=42,
+                node_name='node-alpha-01',
+                command='set_mode',
+                parameters={'mode': 'active'},
+            ),
+        ),
+        (
+            'response',
+            'write_response',
+            ResponseData(
+                timestamp='2026-11-12T18:00:00+00:00',
+                id=42,
+                node_name='node-alpha-01',
+                success=True,
+                message='ok',
+            ),
+        ),
+    ],
+)
+def test_influx_connector_writes_command_id_as_matching_tag(
+        event_type,
+        write_method,
+        data,
+        mock_settings,
+        mock_influx_client,
+):
+    mock_client, mock_write_api, _ = mock_influx_client
+    connector = InfluxConnector()
+
+    getattr(connector, write_method)(data)
+
+    mock_client.write_api.assert_called_once()
+    record = mock_write_api.write.call_args.kwargs['record']
+    assert record['measurement'] == (
+        mock_settings.reticulum_bridge.influxdb.command_measurement
+    )
+    assert record['tags'] == {
+        'node_name': 'node-alpha-01',
+        'command_id': '42',
+        'event_type': event_type,
+    }
+    assert 'id' not in record['fields']
 
 
 def test_influx_connector_destructor_closes_connection(

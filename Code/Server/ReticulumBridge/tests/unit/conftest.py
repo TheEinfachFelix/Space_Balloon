@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from unittest.mock import AsyncMock
 from unittest.mock import MagicMock
 from unittest.mock import patch
 
@@ -11,6 +10,7 @@ from reticulumbridge.config import InfluxDBSharedConfig
 from reticulumbridge.config import ReticulumBridgeConfig
 from reticulumbridge.config import ReticulumConfig
 from reticulumbridge.config import Settings
+from reticulumbridge.core.reticulum_router import ReticulumRouter
 from reticulumbridge.services.influx import InfluxConnector
 
 
@@ -58,11 +58,28 @@ def mock_reticulum_bridge():
     with (
         patch('reticulumbridge.dependencies.get_reticulum_bridge')
         as mock_get,
+        patch('reticulumbridge.dependencies.get_reticulum_router')
+        as mock_get_router,
     ):
+        router = ReticulumRouter()
+        mock_get_router.return_value = router
+
         bridge = MagicMock()
-        bridge.sendMsg = AsyncMock()
+        bridge.sendMsg = MagicMock()
         mock_get.return_value = bridge
+        router.register('send', bridge.sendMsg)
         yield bridge
+
+
+@pytest.fixture
+def mock_influx_connector():
+    """Mockt den Connector für Tests, die nur IDs erzeugen müssen."""
+    with patch(
+        'reticulumbridge.dependencies.get_influx_connector',
+    ) as mock_get:
+        connector = MagicMock()
+        mock_get.return_value = connector
+        yield connector
 
 
 @pytest.fixture

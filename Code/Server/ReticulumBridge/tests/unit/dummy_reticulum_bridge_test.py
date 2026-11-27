@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import asyncio
 from unittest.mock import MagicMock
 from unittest.mock import patch
 
@@ -16,6 +17,7 @@ from reticulumbridge.models import ResponseData
 @pytest.mark.asyncio
 async def test_send_msg_returns_successful_response_to_command_handler(
     mock_settings,
+    mock_influx_connector,
 ):
     command = CommandData(
         id=42,
@@ -24,7 +26,12 @@ async def test_send_msg_returns_successful_response_to_command_handler(
         command='set_mode',
         parameters={'mode': 'safe'},
     )
+    mock_influx_connector.generate_id.return_value = command.id
     router = ReticulumRouter()
+    router.register(
+        'send',
+        lambda data: asyncio.create_task(bridge.sendMsg(data)),
+    )
     handler = CommandHandler()
     assert (
         handler.timeout_s
@@ -51,6 +58,7 @@ async def test_send_msg_returns_successful_response_to_command_handler(
     assert response.node_name == command.node_name
     assert response.success is True
     assert response.result == command.parameters
+    mock_influx_connector.generate_id.assert_called_once_with()
 
 
 @pytest.mark.parametrize(
