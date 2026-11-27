@@ -4,6 +4,5 @@ from .base import BaseData
 
 
 class TelemetryData(BaseData):
-    timestamp: str
     test_field_1: float
     # Hier können weitere Felder für Telemetriedaten hinzugefügt werden
