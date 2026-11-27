@@ -42,12 +42,8 @@ class CommandHandler:
 
         try:
             # Senden an Reticulum
-            from reticulumbridge.dependencies import get_reticulum_bridge
-            bridge = get_reticulum_bridge()
-
             from reticulumbridge.dependencies import get_reticulum_router
             get_reticulum_router().route_message('send', command)
-            await bridge.sendMsg(command)
 
             # Warten auf Antwort mit konfigurierbarem Timeout
             response = await asyncio.wait_for(future, timeout=self.timeout_s)
