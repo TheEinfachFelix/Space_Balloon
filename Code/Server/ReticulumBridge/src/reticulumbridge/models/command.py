@@ -7,10 +7,10 @@ from pydantic import Field
 
 
 class CommandData(BaseModel):
-    timestamp: str
-    id: int
+    timestamp: str | None = Field(default=None)
+    id: int | None = Field(default=None)
     node_name: str
-    command: Literal['ping', 'get_status', 'set_mode'] = 'ping'
+    command: Literal['ping', 'get_status', 'set_mode',"reboot"] = 'ping'
     parameters: dict[str, str | int | float | bool] = Field(
         default_factory=dict,
     )

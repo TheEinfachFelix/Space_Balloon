@@ -10,6 +10,7 @@ class DummyReticulumBridge:
         logger.info('DummyReticulumBridge initialized')
 
     async def sendMsg(self, data: CommandData) -> None:
+
         response = ResponseData(
             id=data.id,
             timestamp=data.timestamp,
